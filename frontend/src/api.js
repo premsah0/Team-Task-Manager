@@ -1,8 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://team-task-manager-production-318a.up.railway.app/api'
+    baseURL: 'https://optimistic-dedication-production-b805.up.railway.app/api'
 });
+
 
 // Interceptor to add token to requests
 api.interceptors.request.use((config) => {
