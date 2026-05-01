@@ -20,8 +20,12 @@ app.use(cors({
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 app.use(express.json());
 
+app.get("/health", (req, res) => {
+  res.send("Hello World!");
+});
 
 
 // Routes
