@@ -44,20 +44,18 @@ const CreateProject = () => {
 
     return (
         <div className="max-w-2xl mx-auto py-10 px-4 sm:px-6">
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-                <div className="bg-indigo-600 px-6 py-8 text-center sm:text-left sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <h2 className="text-2xl font-bold text-white flex items-center justify-center sm:justify-start gap-2">
-                            <FolderPlus size={24} />
-                            Create New Project
-                        </h2>
-                        <p className="text-indigo-100 mt-2 text-sm">Set up a workspace and invite team members</p>
-                    </div>
+            <div className="bg-slate-800 rounded-xl shadow-lg border border-slate-700/50 overflow-hidden">
+                <div className="bg-indigo-500 px-6 py-8 text-center sm:text-left">
+                    <h2 className="text-2xl font-bold text-white flex items-center justify-center sm:justify-start gap-2">
+                        <FolderPlus size={24} />
+                        Create New Project
+                    </h2>
+                    <p className="text-indigo-100 mt-2 text-sm">Set up a workspace and invite team members</p>
                 </div>
 
                 <div className="p-6 sm:p-8">
                     {error && (
-                        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-md mb-6 flex items-center gap-2">
+                        <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-lg mb-6 flex items-center gap-2">
                             <AlertCircle size={20} />
                             <p>{error}</p>
                         </div>
@@ -65,51 +63,51 @@ const CreateProject = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-2">Project Name</label>
+                            <label className="block text-sm font-semibold text-slate-300 mb-2">Project Name</label>
                             <input 
                                 type="text" 
                                 value={name} 
                                 onChange={(e) => setName(e.target.value)} 
                                 required 
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                                className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                                 placeholder="e.g. Website Redesign Q3"
                             />
                         </div>
                         
                         <div>
-                            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                                <UsersIcon size={16} className="text-gray-500" />
+                            <label className="flex items-center gap-2 text-sm font-semibold text-slate-300 mb-2">
+                                <UsersIcon size={16} className="text-slate-500" />
                                 Assign Members
                             </label>
-                            <p className="text-xs text-gray-500 mb-3">Hold Ctrl (Windows) or Cmd (Mac) to select multiple members</p>
+                            <p className="text-xs text-slate-500 mb-3">Hold Ctrl (Windows) or Cmd (Mac) to select multiple members</p>
                             
                             <select 
                                 multiple 
                                 value={selectedMembers} 
                                 onChange={handleMemberSelect} 
-                                className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all h-48 bg-white shadow-sm"
+                                className="w-full px-3 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none transition-all h-48"
                             >
                                 {users.length === 0 && <option disabled>Loading users...</option>}
                                 {users.map(user => (
-                                    <option key={user._id} value={user._id} className="p-2 mb-1 hover:bg-indigo-50 rounded">
+                                    <option key={user._id} value={user._id} className="p-2 mb-1 bg-slate-700">
                                         {user.name} ({user.email}) - {user.role}
                                     </option>
                                 ))}
                             </select>
                         </div>
                         
-                        <div className="pt-4 border-t border-gray-100 flex justify-end gap-3">
+                        <div className="pt-4 border-t border-slate-700/50 flex justify-end gap-3">
                             <button 
                                 type="button" 
                                 onClick={() => navigate('/')}
-                                className="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                className="px-5 py-2.5 text-sm font-medium text-slate-400 bg-slate-700/50 border border-slate-600 rounded-lg hover:bg-slate-700 transition-colors"
                             >
                                 Cancel
                             </button>
                             <button 
                                 type="submit" 
                                 disabled={isLoading || !name.trim()}
-                                className="px-6 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-200 transition-all disabled:opacity-70 flex items-center gap-2"
+                                className="px-6 py-2.5 text-sm font-medium text-white bg-indigo-500 rounded-lg hover:bg-indigo-600 focus:ring-4 focus:ring-indigo-500/30 transition-all disabled:opacity-70 flex items-center gap-2"
                             >
                                 {isLoading ? 'Creating...' : 'Create Project'}
                             </button>

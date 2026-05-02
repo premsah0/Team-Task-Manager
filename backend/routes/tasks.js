@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import Task from "../models/Task.js";
+import Project from "../models/Project.js";
 import { protect, admin } from '../middleware/auth.js';
 
 // Create a task (Admin only)
@@ -28,8 +29,12 @@ router.get('/', protect, async (req, res) => {
     try {
         let tasks;
         if (req.user.role === 'Admin') {
-            // Admin sees all tasks for their projects (simplification: sees all tasks)
-            tasks = await Task.find({}).populate('assignedTo', 'name email').populate('projectId', 'name');
+            // Admin sees only tasks for their own projects
+            const myProjects = await Project.find({ createdBy: req.user.id }).select('_id');
+            const projectIds = myProjects.map(p => p._id);
+            tasks = await Task.find({ projectId: { $in: projectIds } })
+                .populate('assignedTo', 'name email')
+                .populate('projectId', 'name');
         } else {
             // Member sees their assigned tasks
             tasks = await Task.find({ assignedTo: req.user.id }).populate('projectId', 'name');
@@ -50,7 +55,24 @@ router.put('/:id/status', protect, async (req, res) => {
             return res.status(404).json({ message: 'Task not found' });
         }
 
-        // Simplification: both Admin and assigned Member can update status
+        // Ownership check for Admin
+        if (req.user.role === 'Admin') {
+            const project = await Project.findById(task.projectId);
+            if (!project) {
+                return res.status(404).json({ message: 'Project not found' });
+            }
+            if (project.createdBy.toString() !== req.user.id) {
+                return res.status(403).json({ message: 'Not authorized to update this task' });
+            }
+        }
+
+        // For Member, ensure they are the assigned user
+        if (req.user.role === 'Member') {
+            if (!task.assignedTo || task.assignedTo.toString() !== req.user.id) {
+                return res.status(403).json({ message: 'Not authorized to update this task' });
+            }
+        }
+
         task.status = status;
         const updatedTask = await task.save();
 
